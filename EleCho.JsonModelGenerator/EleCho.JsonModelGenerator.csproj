@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Image\logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EleCho.Json" Version="1.2.2" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+  </ItemGroup>
+
+</Project>

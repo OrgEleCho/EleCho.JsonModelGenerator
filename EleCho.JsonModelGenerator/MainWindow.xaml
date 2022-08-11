@@ -1,0 +1,133 @@
+﻿<Window x:Class="EleCho.JsonModelGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EleCho.JsonModelGenerator"
+        xmlns:vm="clr-namespace:EleCho.JsonModelGenerator.ViewModel"
+        mc:Ignorable="d" Icon="pack://application:,,,/Image/logo.ico"
+        Title="EleCho.JsonModelGenerator" Height="580" Width="1000">
+    <Window.DataContext>
+        <vm:MainWindowModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <vm:BooleanToVisibilityConverter x:Key="bool2visibilityCVT"/>
+        <vm:BooleanToGridLengthConverter x:Key="bool2gridLenCVT"/>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Cascadia Code"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <VisualBrush Stretch="None" Viewport="0,0,1,1">
+                        <VisualBrush.Visual>
+                            <TextBlock x:Name="bg" Text="Here your JSON" Opacity="0.2"/>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Name="input" AcceptsReturn="True" Tag="QWQ"
+                     FontFamily="Cascadia Code" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="{Binding ShowLog, Mode=TwoWay, Converter={StaticResource bool2gridLenCVT}}"/>
+                </Grid.RowDefinitions>
+                <TextBox Name="output" IsReadOnly="True" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <TextBox Name="log" IsReadOnly="True" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Name="optionRow" Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Margin" Value="0, 0, 10, 0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand" IsChecked="{Binding ShowOptions}">选项</CheckBox>
+                    <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand" IsChecked="{Binding ShowLog}">显示日志</CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="10, 0, 0, 0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Padding="10, 3" HorizontalAlignment="Right" Click="Button_Click">导出到文件</Button>
+                    <Button Padding="10, 3" HorizontalAlignment="Right" Click="Button_Click">转换</Button>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Visibility="{Binding ShowOptions,Converter={StaticResource bool2visibilityCVT}}">
+                <ScrollViewer Height="100">
+                    <ItemsControl Margin="10">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="FrameworkElement">
+                                <Setter Property="Margin" Value="0,0,0,10"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <GroupBox Header="类型命名">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="使用大驼峰(帕斯卡)" IsChecked="{Binding UsePascal}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用小驼峰" IsChecked="{Binding UseCamel}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用蛇形" IsChecked="{Binding UseSnake}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用原名" IsChecked="{Binding UseOriginName}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="类型嵌套">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="将 JSON 实体类嵌套" IsChecked="{Binding UseNestedClasses}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="将 JSON 实体类置于同级" IsChecked="{Binding UseTopmostClasses}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="将 JSON 实体类置于同级并优化命名" IsChecked="{Binding UseTopmostClassesAndBetterNames}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="数组类型">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="使用数组(Array)" IsChecked="{Binding UseArrayForCollection}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用列表(List&lt;T&gt;)" IsChecked="{Binding UseListForCollection}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用可迭代(IEnumerable&lt;T&gt;)" IsChecked="{Binding UseIEnumerableForCollection}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="数组成员类型命名">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="使用内置英文单复数转换" IsChecked="{Binding UseAutomaticallyTranslateForForCollectionItemClass}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="直接使用属性名" IsChecked="{Binding UsePropertyNameForCollectionItemClass}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="使用属性名 + 'Item'" IsChecked="{Binding UsePropertyNameAndItemForCollectionItemClass}"/>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox Header="属性特性添加">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="不添加" IsChecked="{Binding UseNoAttribute}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="System.Text.Json" IsChecked="{Binding UseSystemTextJsonAttribute}"/>
+                                <RadioButton Margin="20, 0, 0, 0" Content="Newtonsoft.Json" IsChecked="{Binding UseNewtonsoftJsonAttribute}"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
