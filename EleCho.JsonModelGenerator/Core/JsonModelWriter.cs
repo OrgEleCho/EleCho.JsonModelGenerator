@@ -200,13 +200,16 @@ namespace EleCho.JsonModelGenerator.Core
                         if (hasarr && hasobj)
                         {
                             name2type[kv.Key] = GetTypeNameOfCollection("object");
-                            return true;
                         }
                         else
                         {
                             if (WriteJsonModelCore(level, kv.Key, jarr, classParents, out string _arrClassName))
                             {
                                 name2type[kv.Key] = _arrClassName;
+                            }
+                            else
+                            {
+                                name2type[kv.Key] = GetTypeNameOfCollection("object");
                             }
                         }
                     }
@@ -223,6 +226,10 @@ namespace EleCho.JsonModelGenerator.Core
                             if (WriteJsonModelCore(level, kv.Key, jarr, classParents, out string _arrClassName))
                             {
                                 name2type[kv.Key] = _arrClassName;
+                            }
+                            else
+                            {
+                                name2type[kv.Key] = GetTypeNameOfCollection("object");
                             }
                         }
                         else
@@ -249,7 +256,6 @@ namespace EleCho.JsonModelGenerator.Core
         protected bool WriteJsonModelCore(int level, string name, JsonObject data, IEnumerable<string> classParents, out string className)
         {
             Dictionary<string, string> name2type;
-
             className = GenerateClassNameFromPropertyName(name, classParents);
 
             if (_options.ClassNestStyle == ClassNestStyle.Nest)

@@ -5,6 +5,11 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EleCho.JsonModelGenerator", "EleCho.JsonModelGenerator\EleCho.JsonModelGenerator.csproj", "{DDAE0556-79A8-4A0D-A2D7-75A6C1E8EF93}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86C4E962-DC0E-4174-9CD2-6BB7F751B788}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
